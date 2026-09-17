@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfessorRouteImport } from './routes/professor'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as StudentIndexRouteImport } from './routes/student.index'
+import { Route as StudentMasteryRouteImport } from './routes/student.mastery'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,16 +35,23 @@ const StudentIndexRoute = StudentIndexRouteImport.update({
   path: '/',
   getParentRoute: () => StudentRoute,
 } as any)
+const StudentMasteryRoute = StudentMasteryRouteImport.update({
+  id: '/mastery',
+  path: '/mastery',
+  getParentRoute: () => StudentRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/professor': typeof ProfessorRoute
   '/student': typeof StudentRouteWithChildren
+  '/student/mastery': typeof StudentMasteryRoute
   '/student/': typeof StudentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/professor': typeof ProfessorRoute
+  '/student/mastery': typeof StudentMasteryRoute
   '/student': typeof StudentIndexRoute
 }
 export interface FileRoutesById {
@@ -51,14 +59,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/professor': typeof ProfessorRoute
   '/student': typeof StudentRouteWithChildren
+  '/student/mastery': typeof StudentMasteryRoute
   '/student/': typeof StudentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/professor' | '/student' | '/student/'
+  fullPaths: '/' | '/professor' | '/student' | '/student/mastery' | '/student/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/professor' | '/student'
-  id: '__root__' | '/' | '/professor' | '/student' | '/student/'
+  to: '/' | '/professor' | '/student/mastery' | '/student'
+  id:
+    | '__root__'
+    | '/'
+    | '/professor'
+    | '/student'
+    | '/student/mastery'
+    | '/student/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,14 +112,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentIndexRouteImport
       parentRoute: typeof StudentRoute
     }
+    '/student/mastery': {
+      id: '/student/mastery'
+      path: '/mastery'
+      fullPath: '/student/mastery'
+      preLoaderRoute: typeof StudentMasteryRouteImport
+      parentRoute: typeof StudentRoute
+    }
   }
 }
 
 interface StudentRouteChildren {
+  StudentMasteryRoute: typeof StudentMasteryRoute
   StudentIndexRoute: typeof StudentIndexRoute
 }
 
 const StudentRouteChildren: StudentRouteChildren = {
+  StudentMasteryRoute: StudentMasteryRoute,
   StudentIndexRoute: StudentIndexRoute,
 }
 
